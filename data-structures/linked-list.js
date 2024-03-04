@@ -29,31 +29,107 @@ class LinkedList {
         let current;
 
         // if list is empty, add element and make it head 
-        if(this.head === null) {
+        if (this.head === null) {
             this.head = node;
         } else {
             current = this.head;
 
             // iterate to end of linked list
-            while(current.next) {
+            while (current.next) {
                 current = current.next;
             }
 
             current.next = node;
         }
         this.size++;
-        const elemDetails = {
-            size: this.size,
-            node,
-            head: this.head,
-            next: node.next
+        // const elemDetails = {
+        //     size: this.size,
+        //     node,
+        //     head: this.head,
+        //     next: node.next
+        // }
+        // console.log(`elemDetails for added ${element}`, elemDetails);
+    }
+
+    // returns the element in the linked list at a given index
+    fetchElementAt(index) {
+        // check for valid index
+        if (!index || index > this.size) {
+            const msg = 'Please enter valid index';
+            console.log(msg);
+            return -1;
         }
-        console.log(`elemDetails for added ${element}`, elemDetails);
+
+        // init count and current node
+        let count = 1;
+        let current = this.head;
+
+        // iterate through the list of nodes untill count meets the given index
+        while (count < index) {
+            current = current.next;
+            count++;
+        }
+        return current;
+    }
+
+    // returns all the elements in the linked list
+    fetchElements() {
+        // init count, elements to return and current node
+        let count = 0;
+        let elements = [];
+        let current = this.head;
+
+        // iterate through the size and capture the element
+        while (count < this.size) {
+            elements.push(current.element);
+            current = current.next;
+            count++;
+        }
+        return { elements, nodes: JSON.stringify(this.head)};
+    }
+
+    // inserts element in the linked list at a given index
+    insertAt(element, index) {
+        // check for valid index
+        if (!index || index >= this.size) {
+            const msg = 'Please enter valid index';
+            console.log(msg);
+            return -1;
+        }
+
+        // init count and current node
+        let count = 1;
+        let prev = this.head;
+        let current = prev.next;
+
+        while(count < index -1 ) {
+            prev = prev.next;
+            current = prev.next;
+            count++
+        }
+        let node = new Node(element);
+        prev.next = node;
+        node.next = current;
+        this.size++
+    }
+
+    // returns the size of list
+    getSize() {
+        return this.size;
     }
 }
 
 const linkedList = new LinkedList();
 
+linkedList.add(10);
 linkedList.add(20);
 linkedList.add(30);
-// linkedList.add(40)
+linkedList.add(40);
+linkedList.add(50);
+linkedList.add(60);
+linkedList.add(70);
+linkedList.add(80);
+console.log(linkedList.fetchElementAt(1))
+console.log(linkedList.fetchElements());
+linkedList.insertAt(80, 4);
+console.log(linkedList.fetchElements());
