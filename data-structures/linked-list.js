@@ -42,26 +42,19 @@ class LinkedList {
             current.next = node;
         }
         this.size++;
-        // const elemDetails = {
-        //     size: this.size,
-        //     node,
-        //     head: this.head,
-        //     next: node.next
-        // }
-        // console.log(`elemDetails for added ${element}`, elemDetails);
     }
 
     // returns the element in the linked list at a given index
     fetchElementAt(index) {
         // check for valid index
-        if (!index || index > this.size) {
+        if (index < 0 || index > this.size) {
             const msg = 'Please enter valid index';
             console.log(msg);
             return -1;
         }
 
         // init count and current node
-        let count = 1;
+        let count = 0;
         let current = this.head;
 
         // iterate through the list of nodes untill count meets the given index
@@ -85,32 +78,54 @@ class LinkedList {
             current = current.next;
             count++;
         }
-        return { elements, nodes: JSON.stringify(this.head)};
+        return { elements, nodes: JSON.stringify(this.head) };
     }
 
     // inserts element in the linked list at a given index
     insertAt(element, index) {
         // check for valid index
-        if (!index || index >= this.size) {
+        if (index < 0 || index >= this.size) {
             const msg = 'Please enter valid index';
             console.log(msg);
             return -1;
         }
 
         // init count and current node
-        let count = 1;
-        let prev = this.head;
-        let current = prev.next;
+        let count = 0;
+        let current = this.head;
+        let prev;
 
-        while(count < index -1 ) {
-            prev = prev.next;
-            current = prev.next;
+        while (count < index) {
+            prev = current;
+            current = current.next;
             count++
         }
         let node = new Node(element);
-        prev.next = node;
-        node.next = current;
+        if (index === 0) {
+            node.next = this.head;
+            this.head = node;
+        } else {
+            node.next = current;
+            prev.next = node;
+        }
         this.size++
+    }
+
+    push(element) {
+        // set current to the head
+        let current = this.head;
+
+        // iterate over elements in linked list till pointer reaches last element
+        while (current.next) {
+            current = current.next;
+        }
+
+        // create node and assign it to the previous last element
+        let node = new Node(element);
+        current.next = node;
+
+        // increase size of linked list
+        this.size++;
     }
 
     // returns the size of list
@@ -122,14 +137,17 @@ class LinkedList {
 const linkedList = new LinkedList();
 
 linkedList.add(10);
-linkedList.add(20);
 linkedList.add(30);
 linkedList.add(40);
 linkedList.add(50);
 linkedList.add(60);
 linkedList.add(70);
 linkedList.add(80);
-console.log(linkedList.fetchElementAt(1))
+console.log(linkedList.fetchElementAt(2))
 console.log(linkedList.fetchElements());
-linkedList.insertAt(80, 4);
+linkedList.insertAt(20, 1);
 console.log(linkedList.fetchElements());
+linkedList.push(100);
+console.log(linkedList.fetchElements());
+linkedList.push(90);
+console.log(linkedList.getSize());
